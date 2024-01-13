@@ -301,7 +301,7 @@ public:
                   LayoutDeviceIntRegion());
   void EndUpdate(bool aKeepSurface = false);
 
-#if defined(MAC_OS_X_VERSION_10_6) && (MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_6)
+#if defined(MAC_OS_X_VERSION_10_6) && (MAC_OS_X_VERSION_MAX_ALLOWED > MAC_OS_X_VERSION_10_6)
   void UpdateIfNeeded(const LayoutDeviceIntSize& aNewSize,
                       const LayoutDeviceIntRegion& aDirtyRegion,
                       void (^aCallback)(gfx::DrawTarget*,
@@ -778,7 +778,7 @@ bool nsChildView::IsVisible() const
 // private method -[NSWindow _setNeedsDisplayInRect:]. Our BaseWindow
 // implementation of that method is augmented to let us ignore those calls
 // using -[BaseWindow disable/enableSetNeedsDisplay].
-#if defined(MAC_OS_X_VERSION_10_6) && (MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_6)
+#if defined(MAC_OS_X_VERSION_10_6) && (MAC_OS_X_VERSION_MAX_ALLOWED > MAC_OS_X_VERSION_10_6)
 static void
 ManipulateViewWithoutNeedingDisplay(NSView* aView, void (^aCallback)())
 {
@@ -811,7 +811,7 @@ NS_IMETHODIMP nsChildView::Show(bool aState)
     // no pool in place.
     nsAutoreleasePool localPool;
 
-#if defined(MAC_OS_X_VERSION_10_6) && (MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_6)
+#if defined(MAC_OS_X_VERSION_10_6) && (MAC_OS_X_VERSION_MAX_ALLOWED > MAC_OS_X_VERSION_10_6)
     ManipulateViewWithoutNeedingDisplay(mView, ^{
       [mView setHidden:!aState];
     });
@@ -1054,7 +1054,7 @@ NS_IMETHODIMP nsChildView::Move(double aX, double aY)
   mBounds.x = x;
   mBounds.y = y;
 
-#if defined(MAC_OS_X_VERSION_10_6) && (MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_6)
+#if defined(MAC_OS_X_VERSION_10_6) && (MAC_OS_X_VERSION_MAX_ALLOWED > MAC_OS_X_VERSION_10_6)
   ManipulateViewWithoutNeedingDisplay(mView, ^{
     [mView setFrame:DevPixelsToCocoaPoints(mBounds)];
   });
@@ -1083,7 +1083,7 @@ NS_IMETHODIMP nsChildView::Resize(double aWidth, double aHeight, bool aRepaint)
   mBounds.width  = width;
   mBounds.height = height;
 
-#if defined(MAC_OS_X_VERSION_10_6) && (MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_6)
+#if defined(MAC_OS_X_VERSION_10_6) && (MAC_OS_X_VERSION_MAX_ALLOWED > MAC_OS_X_VERSION_10_6)
   ManipulateViewWithoutNeedingDisplay(mView, ^{
     [mView setFrame:DevPixelsToCocoaPoints(mBounds)];
   });
@@ -1126,7 +1126,7 @@ NS_IMETHODIMP nsChildView::Resize(double aX, double aY,
     mBounds.height = height;
   }
 
-#if defined(MAC_OS_X_VERSION_10_6) && (MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_6)
+#if defined(MAC_OS_X_VERSION_10_6) && (MAC_OS_X_VERSION_MAX_ALLOWED > MAC_OS_X_VERSION_10_6)
   ManipulateViewWithoutNeedingDisplay(mView, ^{
     [mView setFrame:DevPixelsToCocoaPoints(mBounds)];
   });
@@ -2156,7 +2156,7 @@ nsChildView::MaybeDrawResizeIndicator(GLManager* aManager)
   }
 
   LayoutDeviceIntSize size = mResizeIndicatorRect.Size();
-#if defined(MAC_OS_X_VERSION_10_6) && (MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_6)
+#if defined(MAC_OS_X_VERSION_10_6) && (MAC_OS_X_VERSION_MAX_ALLOWED > MAC_OS_X_VERSION_10_6)
   mResizerImage->UpdateIfNeeded(size, LayoutDeviceIntRegion(), ^(gfx::DrawTarget* drawTarget, const LayoutDeviceIntRegion& updateRegion) {
     ClearRegion(drawTarget, updateRegion);
     gfx::BorrowedCGContext borrow(drawTarget);
@@ -2417,7 +2417,7 @@ nsChildView::MaybeDrawRoundedCorners(GLManager* aManager,
   }
 
   LayoutDeviceIntSize size(mDevPixelCornerRadius, mDevPixelCornerRadius);
-#if defined(MAC_OS_X_VERSION_10_6) && (MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_6)
+#if defined(MAC_OS_X_VERSION_10_6) && (MAC_OS_X_VERSION_MAX_ALLOWED > MAC_OS_X_VERSION_10_6)
   mCornerMaskImage->UpdateIfNeeded(size, LayoutDeviceIntRegion(), ^(gfx::DrawTarget* drawTarget, const LayoutDeviceIntRegion& updateRegion) {
     ClearRegion(drawTarget, updateRegion);
     RefPtr<gfx::PathBuilder> builder = drawTarget->CreatePathBuilder();
@@ -3371,7 +3371,7 @@ NSEvent* gLastDragMouseDownEvent = nil;
 // It seems to have something to do with the secret underlying NSInputContext
 // and NSTSMInputContext, which became NSTextInputContext in 10.6.
 
-#if defined(__APPLE__) && defined(MAC_OS_X_VERSION_10_6) && (MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_6)
+#if defined(__APPLE__) && defined(MAC_OS_X_VERSION_10_6) && (MAC_OS_X_VERSION_MAX_ALLOWED > MAC_OS_X_VERSION_10_6)
 // ComplexTextInputPanel's interpretKeyEvent hack won't work without this.
 // It makes calls to +[NSTextInputContext currentContext], deep in system
 // code, return the appropriate context.
@@ -4732,7 +4732,7 @@ NSEvent* gLastDragMouseDownEvent = nil;
   return NSRectToCGRect(inWindowCoords);
 }
 
-#if defined(__APPLE__) && defined(MAC_OS_X_VERSION_10_6) && (MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_6)
+#if defined(__APPLE__) && defined(MAC_OS_X_VERSION_10_6) && (MAC_OS_X_VERSION_MAX_ALLOWED > MAC_OS_X_VERSION_10_6)
 static CGSRegionObj
 NewCGSRegionFromRegion(const LayoutDeviceIntRegion& aRegion,
                        CGRect (^aRectConverter)(const LayoutDeviceIntRect&))

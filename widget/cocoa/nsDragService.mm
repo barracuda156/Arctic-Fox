@@ -233,8 +233,7 @@ nsDragService::ConstructDragImage(nsIDOMNode* aDOMNode,
   NS_OBJC_END_TRY_ABORT_BLOCK_NIL;
 }
 
-
-#if defined(MAC_OS_X_VERSION_10_6) && (MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_6)
+#if defined(MAC_OS_X_VERSION_10_6) && (MAC_OS_X_VERSION_MAX_ALLOWED > MAC_OS_X_VERSION_10_6)
 bool
 nsDragService::IsValidType(NSString* availableType, bool allowFileURL)
 {
@@ -441,7 +440,7 @@ nsDragService::GetData(nsITransferable* aTransferable, uint32_t aItemIndex)
 
     MOZ_LOG(sCocoaLog, LogLevel::Info, ("nsDragService::GetData: looking for clipboard data of type %s\n", flavorStr.get()));
 
-#if defined(MAC_OS_X_VERSION_10_6) && (MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_6)
+#if defined(MAC_OS_X_VERSION_10_6) && (MAC_OS_X_VERSION_MAX_ALLOWED > MAC_OS_X_VERSION_10_6)
     NSArray* droppedItems = [globalDragPboard pasteboardItems];
     if (!droppedItems) {
       continue;
@@ -459,7 +458,7 @@ nsDragService::GetData(nsITransferable* aTransferable, uint32_t aItemIndex)
 #endif
 
     if (flavorStr.EqualsLiteral(kFileMime)) {
-#if defined(MAC_OS_X_VERSION_10_6) && (MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_6)
+#if defined(MAC_OS_X_VERSION_10_6) && (MAC_OS_X_VERSION_MAX_ALLOWED > MAC_OS_X_VERSION_10_6)
       NSString* filePath = GetFilePath(item);
 #else
        NSArray* pFiles = [globalDragPboard propertyListForType:NSFilenamesPboardType];
@@ -490,7 +489,7 @@ nsDragService::GetData(nsITransferable* aTransferable, uint32_t aItemIndex)
       break;
     }
 
-#if defined(MAC_OS_X_VERSION_10_6) && (MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_6)
+#if defined(MAC_OS_X_VERSION_10_6) && (MAC_OS_X_VERSION_MAX_ALLOWED > MAC_OS_X_VERSION_10_6)
     NSString* pString = nil;
     if (flavorStr.EqualsLiteral(kUnicodeMime)) {
       pString = GetStringForType(item, (const NSString*)kUTTypeUTF8PlainText);
@@ -655,7 +654,7 @@ nsDragService::IsDataFlavorSupported(const char *aDataFlavor, bool *_retval)
     }
   }
 
-#if defined(MAC_OS_X_VERSION_10_6) && (MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_6)
+#if defined(MAC_OS_X_VERSION_10_6) && (MAC_OS_X_VERSION_MAX_ALLOWED > MAC_OS_X_VERSION_10_6)
   const NSString* type = nil;
   bool allowFileURL = false;
   if (dataFlavor.EqualsLiteral(kFileMime)) {

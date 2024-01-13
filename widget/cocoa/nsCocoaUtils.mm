@@ -257,7 +257,7 @@ void nsCocoaUtils::HideOSChromeOnScreen(bool aShouldHide)
   NS_ASSERTION(sHiddenCount >= 0, "Unbalanced HideMenuAndDockForWindow calls");
 
 
-#if defined(MAC_OS_X_VERSION_10_5) && (MAC_OS_X_VERSION_MAX_ALLOWED <= MAC_OS_X_VERSION_10_5)
+#if defined(MAC_OS_X_VERSION_10_5) && (MAC_OS_X_VERSION_MAX_ALLOWED <= MAC_OS_X_VERSION_10_6)
   if (sHiddenCount <= 0) {
     ::SetSystemUIMode(kUIModeNormal, 0);
   } else {

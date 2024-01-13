@@ -359,7 +359,11 @@ GfxInfo::FindMonitors(JSContext* aCx, JS::HandleObject aOutArray)
   // CVDisplayLinkGetNominalOutputVideoRefreshPeriod, but that's a little
   // involved. Ideally we could query it from vsync. For now, we leave it out.
   int32_t deviceCount = 0;
-  for (NSScreen* screen in [NSScreen screens]) {
+  NSArray *screens = [NSScreen screens];
+  size_t screencount = [screens count];
+  size_t i;
+  for(i=0; i<screencount; i++) {
+    NSScreen *screen = [screens objectAtIndex:i];
     NSRect rect = [screen frame];
 
     JS::Rooted<JSObject*> obj(aCx, JS_NewPlainObject(aCx));

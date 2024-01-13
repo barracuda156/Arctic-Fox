@@ -364,7 +364,8 @@ nsFilePicker::GetLocalFiles(const nsString& inTitle, bool inAllowMultiple, nsCOM
   // it creates a new array each time.
   // We are using Fast Enumeration, thus the NSURL array is created once then
   // iterated.
-  for (NSURL* url in [thePanel URLs]) {
+  for (unsigned int i = 0; i < [[thePanel URLs] count]; i++) {
+    NSURL *url = [[thePanel URLs] objectAtIndex:i];
     if (!url) {
       continue;
     }

@@ -9,7 +9,7 @@
 #include "nsPrintOptionsX.h"
 #include "nsPrintSettingsX.h"
 
-#if defined(MAC_OS_X_VERSION_10_5) && (MAC_OS_X_VERSION_MAX_ALLOWED <= MAC_OS_X_VERSION_10_5)
+#if defined(MAC_OS_X_VERSION_10_5) && (MAC_OS_X_VERSION_MAX_ALLOWED <= MAC_OS_X_VERSION_10_6)
 NSString *const NSPrintJobSavingFileNameExtensionHidden = @"NSPrintJobSavingFileNameExtensionHidden";
 NSString *const NSPrintSelectionOnly = @"NSPrintSelectionOnly";
 NSString *const NSPrintJobSavingURL = @"NSPrintJobSavingURL";

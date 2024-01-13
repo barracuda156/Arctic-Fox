@@ -1408,6 +1408,8 @@ nsCocoaWindow::PerformFullscreenTransition(FullscreenTransitionStage aStage,
                                            nsISupports* aData,
                                            nsIRunnable* aCallback)
 {
+// We don't have CoreAnimation, so essentially, don't do anything!
+#if(0)
   auto data = static_cast<FullscreenTransitionData*>(aData);
   FullscreenTransitionDelegate* delegate =
     [[FullscreenTransitionDelegate alloc] init];
@@ -1430,6 +1432,7 @@ nsCocoaWindow::PerformFullscreenTransition(FullscreenTransitionStage aStage,
   [mFullscreenTransitionAnimation setDelegate:delegate];
   [mFullscreenTransitionAnimation setDuration:aDuration / 1000.0];
   [mFullscreenTransitionAnimation startAnimation];
+#endif
 }
 
 void nsCocoaWindow::EnteredFullScreen(bool aFullScreen, bool aNativeMode)
@@ -2811,9 +2814,9 @@ static NSMutableSet *gSwizzledFrameViewClasses = nil;
 
 #endif
 
-#if (!defined(MAC_OS_X_VERSION_10_8) && defined(MAC_OS_X_VERSION_10_6)) \
+#if (!defined(MAC_OS_X_VERSION_10_8) && defined(MAC_OS_X_VERSION_10_7)) \
     || MAC_OS_X_VERSION_MAX_ALLOWED < MAC_OS_X_VERSION_10_8 \
-    && (MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_6)
+    && (MAC_OS_X_VERSION_MAX_ALLOWED > MAC_OS_X_VERSION_10_6)
 
 @interface NSImage(ImageCreationWithDrawingHandler)
 + (NSImage *)imageWithSize:(NSSize)size
@@ -2838,7 +2841,7 @@ static NSMutableSet *gSwizzledFrameViewClasses = nil;
     return [super _cornerMask];
   }
 
-#if !defined(MAC_OS_X_VERSION_10_6)  &&  (MAC_OS_X_VERSION_MAX_ALLOWED <= MAC_OS_X_VERSION_10_5)
+#if !defined(MAC_OS_X_VERSION_10_7)  &&  (MAC_OS_X_VERSION_MAX_ALLOWED <= MAC_OS_X_VERSION_10_6)
   return [super _cornerMask];
 #else
   CGFloat radius = 4.0f;

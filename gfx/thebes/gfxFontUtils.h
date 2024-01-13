@@ -325,7 +325,8 @@ namespace mozilla {
 
 // Byte-swapping types and name table structure definitions moved from
 // gfxFontUtils.cpp to .h file so that gfxFont.cpp can also refer to them
-#pragma pack(1)
+
+// #pragma pack(1)
 
 struct AutoSwap_PRUint16 {
 #ifdef __SUNPRO_CC
@@ -623,7 +624,7 @@ struct CPALHeaderVersion0 {
     AutoSwap_PRUint32    offsetFirstColorRecord;
 };
 
-#pragma pack()
+// #pragma pack()
 
 // Return just the highest bit of the given value, i.e., the highest
 // power of 2 that is <= value, or zero if the input value is zero.
@@ -857,17 +858,29 @@ public:
                            nsAString& aFamilyName);
 
     // Find the table directory entry for a given table tag, in a (validated)
+
     // buffer of 'sfnt' data. Returns null if the tag is not present.
+
     static mozilla::TableDirEntry*
+
     FindTableDirEntry(const void* aFontData, uint32_t aTableTag);
 
+
+
     // Return a blob that wraps a table found within a buffer of font data.
+
     // The blob does NOT own its data; caller guarantees that the buffer
+
     // will remain valid at least as long as the blob.
+
     // Returns null if the specified table is not found.
+
     // This method assumes aFontData is valid 'sfnt' data; before using this,
+
     // caller is responsible to do any sanitization/validation necessary.
+
     static hb_blob_t*
+
     GetTableFromFontData(const void* aFontData, uint32_t aTableTag);
 
     // create a new name table and build a new font with that name table
