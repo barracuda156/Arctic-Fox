@@ -4,6 +4,9 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
+// Fix glitch in MozPromise.h on .mm files with C++11 lambdas.
+#define GCC_BROKEN_LAMBDAS
+
 #include "nsISupports.h"
 #include "nsServiceManagerUtils.h"
 #include "nsObjCExceptions.h"
@@ -17,7 +20,7 @@
 
 #import <Cocoa/Cocoa.h>
 
-#if defined(MAC_OS_X_VERSION_10_5) && (MAC_OS_X_VERSION_MAX_ALLOWED <= MAC_OS_X_VERSION_10_5)
+#if defined(MAC_OS_X_VERSION_10_5) && (MAC_OS_X_VERSION_MAX_ALLOWED <= MAC_OS_X_VERSION_10_6)
 @protocol NSSpeechSynthesizerDelegate
 @end
 #endif
@@ -285,7 +288,9 @@ EnumVoicesRunnable::Run()
   NSArray* voices = [NSSpeechSynthesizer availableVoices];
   NSString* defaultVoice = [NSSpeechSynthesizer defaultVoice];
 
-  for (NSString* voice in voices) {
+  int i;
+  for (i=0; i<[voices count]; i++) {
+    NSString *voice = [voices objectAtIndex:i];
     OSXVoice item;
 
     NSDictionary* attr = [NSSpeechSynthesizer attributesForVoice:voice];
@@ -296,9 +301,7 @@ EnumVoicesRunnable::Run()
 
     nsCocoaUtils::GetStringForNSString([attr objectForKey:NSVoiceName], item.mName);
 
-    nsCocoaUtils::GetStringForNSString(
-      [attr objectForKey:NSVoiceLocaleIdentifier], item.mLocale);
-    item.mLocale.ReplaceChar('_', '-');
+    item.mLocale.AssignLiteral("en-us");
 
     item.mUri.AssignLiteral("urn:moz-tts:osx:");
     item.mUri.Append(identifier);
