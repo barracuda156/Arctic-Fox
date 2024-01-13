@@ -45,23 +45,6 @@ case "$target" in
         HOST_LDFLAGS=" "
     fi
     ;;
-*-darwin*)
-    # GCC on darwin is based on gcc 4.2 and we don't support it anymore.
-    if test -z "$CC"; then
-        MOZ_PATH_PROGS(CC, clang)
-    fi
-    if test -z "$CXX"; then
-        MOZ_PATH_PROGS(CXX, clang++)
-    fi
-    IS_GCC=$($CC -v 2>&1 | grep gcc)
-    if test -n "$IS_GCC"
-    then
-      echo gcc is known to be broken on OS X, please use clang.
-      echo see http://developer.mozilla.org/en-US/docs/Developer_Guide/Build_Instructions/Mac_OS_X_Prerequisites
-      echo for more information.
-      exit 1
-    fi
-    ;;
 esac
 fi
 ])
