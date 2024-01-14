@@ -1,3 +1,5 @@
+#if(0) // Broken code.
+
 // Copyright (c) 2009 The Chromium Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
@@ -6,14 +8,16 @@
 
 #include "base/logging.h"
 
-@interface CrApplication ()
-@property(readwrite,
-          getter=isHandlingSendEvent,
-          nonatomic) BOOL handlingSendEvent;
+@interface CrApplication : NSObject {
+	BOOL handlingSendEvent_;
+}
+- (BOOL)isHandlingSendEvent;
 @end
 
 @implementation CrApplication
-@synthesize handlingSendEvent = handlingSendEvent_;
+- (BOOL)isHandlingSendEvent {
+	return handlingSendEvent_;
+}
 
 // Initialize NSApplication using the custom subclass.  Check whether NSApp
 // was already initialized using another class, because that would break
@@ -66,3 +70,6 @@ ScopedSendingEvent::~ScopedSendingEvent() {
 }
 
 }  // namespace chrome_application_mac
+#else
+#warning chrome_application_mac is defunct
+#endif
